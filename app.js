@@ -43,9 +43,11 @@ app.get('/getEpisode/:query', async (req, res) => {
     res.send(JSON.stringify(result, null, 4))
 })
 
-app.get('/telegraph/:url', async (req, res) => {
+app.get('/telegraph', async (req, res) => {
 
-    const result = await scapper.telegraph(req.params.url)
+    if(!req.query.url) res.send("'url' param is needed!")
+
+    const result = await scapper.telegraph(req.query.url)
     res.header("Content-Type", 'application/json');
     res.json({src: result})
 })
