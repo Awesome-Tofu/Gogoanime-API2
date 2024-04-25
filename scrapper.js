@@ -2,6 +2,9 @@ const cheerio = require('cheerio');
 const axios = require('axios');
 const puppeteer =  require('puppeteer');
 const userAgent = require('user-agents');
+const FormData = require("form-data");
+let mime = require("mime-to-extensions");
+const fs = require("fs");
 
 // https://www3.gogoanimes.fi/
 // https://gogoanime.run
@@ -137,12 +140,56 @@ async function getDownloadLink(episode_link) {
     return (links)
 }
 
+async function downloadImage(url, destination) {
+  const response = await axios({
+    url,
+    method: "GET",
+    responseType: "stream",
+  });
+  response.data.pipe(fs.createWriteStream(destination));
+  return new Promise((resolve, reject) => {
+    response.data.on("end", () => {
+      resolve();
+    });
+    response.data.on("error", (err) => {
+      reject(err);
+    });
+  });
+}
+
+async function uploadImageToTelegraph(imagePath) {
+  let imageBuffer = fs.readFileSync(imagePath);
+  let form = new FormData();
+  form.append("file", imageBuffer, {
+    filename: `telegraph.${mime.extension('image/png')}`,
+  });
+  return axios
+    .create({
+      headers: form.getHeaders(),
+    })
+    .post("https://te.legra.ph/upload", form)
+    .then((response) => {
+      return "https://te.legra.ph" + response.data[0].src;
+    })
+    .catch((error) => {
+      return "error";
+    });
+}
+
+async function telegraph(imageUrl) {
+  const imagePath = "/tmp/downloaded_image.png";
+  await downloadImage(imageUrl, imagePath);
+  const telegraphUrl = await uploadImageToTelegraph(imagePath);
+  return telegraphUrl
+}
+
 
 module.exports = {
     popular,
     newSeason,
     search,
     anime,
-    watchAnime
+    watchAnime,
+    telegraph
 }
 
