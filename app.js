@@ -43,6 +43,13 @@ app.get('/getEpisode/:query', async (req, res) => {
     res.send(JSON.stringify(result, null, 4))
 })
 
+app.get('/telegraph/:url', async (req, res) => {
+
+    const result = await scapper.telegraph(req.params.url)
+    res.header("Content-Type", 'application/json');
+    res.json({src: result})
+})
+
 port = env.PORT || 3000
 app.listen(port, () => {
     console.log(`Listening to port ${port}`)
