@@ -10,7 +10,8 @@ const fs = require("fs");
 // https://gogoanime.run
 // https://ww5.gogoanimes.fi/
 // https://gogoanime.org.za/
-const baseUrl = "https://ww5.gogoanimes.fi"
+// https://anitaku.so/
+const baseUrl = "https://anitaku.so/"
 
 async function newSeason(page) {
     var anime_list = []
