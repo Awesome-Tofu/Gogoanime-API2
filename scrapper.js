@@ -8,7 +8,9 @@ const fs = require("fs");
 
 // https://www3.gogoanimes.fi/
 // https://gogoanime.run
-const baseUrl = "https://gogoanime.run"
+// https://ww5.gogoanimes.fi/
+// https://gogoanime.org.za/
+const baseUrl = "https://ww5.gogoanimes.fi"
 
 async function newSeason(page) {
     var anime_list = []
@@ -85,9 +87,9 @@ async function anime(_anime_name) {
 
     img_url = $('div.anime_info_body_bg  img').attr('src')
     anime_name = $('div.anime_info_body_bg  h1').text()
-    anime_about = $('div.main_body  div:nth-child(2) > div.anime_info_body_bg > p:nth-child(5)').text()
+    anime_about = $('div.description').text().trim();
 
-    anime_about = $('div.main_body  div:nth-child(2) > div.anime_info_body_bg > p:nth-child(5)').text()
+    // anime_about = $('div.main_body  div:nth-child(2) > div.anime_info_body_bg > p:nth-child(5)').text()
 
     //add the new code here
     el = $('#episode_page')
