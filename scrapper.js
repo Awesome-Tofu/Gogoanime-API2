@@ -186,6 +186,19 @@ async function telegraph(imageUrl) {
   return telegraphUrl
 }
 
+async getRedirectUrl(url) {
+    try {
+        // Make a GET request to the provided URL
+        const response = await axios.get(url);
+
+        const new_url = response.request._redirectable._currentUrl
+        // console.log(new_url);
+        return new_url;
+    } catch (error) {
+        console.log(error)
+    }
+}
+
 
 module.exports = {
     popular,
@@ -193,6 +206,7 @@ module.exports = {
     search,
     anime,
     watchAnime,
-    telegraph
+    telegraph,
+    getRedirectUrl
 }
 
